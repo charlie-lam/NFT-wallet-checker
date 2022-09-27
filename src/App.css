@@ -1,28 +1,101 @@
-#whole{
+#whole {
   min-height: 100%;
   width: 100%;
   background: rgb(244, 247, 245);
   background: linear-gradient(
     90deg,
-    rgba(244, 247, 245, 1) 51%,
+    rgb(228, 231, 229) 51%,
     rgba(45, 232, 125, 1) 100%
   );
-  display:flex;
-  flex-direction:column;
+  display: flex;
+  flex-direction: column;
 }
 
 header {
-  display:flex;
+  display: flex;
   align-content: center;
   justify-content: space-between;
+  margin: 10px;
+  color: #e8b008;
+  padding: 0 10px;
+}
+
+header h4 {
+  color: black;
+  font-weight: 400;
+}
+
+#content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 0;
 }
 
 #form-div {
-  width:90%;
-  height:50%;
+  width: 20%;
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
   background: white;
-  display:flex;
+  display: flex;
   justify-content: center;
   align-items: center;
+  box-shadow: 3px 3px rgba(244, 247, 245, 1);
+  padding: 10px;
 }
 
+#wallet-summary {
+  width: 95%;
+  height: 30%;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+  justify-content: space-between;
+  align-items: center;
+  margin: 20px 0;
+  background: white;
+  padding: 5px 5px 5px 20px;
+  border-radius: 10px;
+  box-shadow: 3px 3px rgba(244, 247, 245, 1);
+}
+
+.sum-div {
+  height: 100%;
+}
+
+#dollar-total,
+#eth-total {
+  font-weight: 500;
+}
+
+#nfts-whole {
+  width: 90%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.nft-div {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  justify-content: space-evenly;
+  align-items: center;
+  background: white;
+  border-radius: 10px;
+  padding: 5px 5px 5px 15px;
+  box-shadow: 3px 3px rgba(244, 247, 245, 1);
+}
+
+.name-div {
+  grid-column: 1 / 5;
+}
+
+.name-div p {
+  color: rgb(33, 172, 93);
+  font-size: 1.2rem;
+  margin-left: 10px;
+  font-weight: 500;
+}
