@@ -16,6 +16,11 @@ const getWalletCollections = async (wallet) => {
     return jsonRes.map((item) => ({
       name: item.slug,
       assets: item.owned_asset_count,
+      contractAddress: item.primary_asset_contracts[0].address,
+      details: item.description,
+      ident: item.name,
+      oneDaySales: item.stats.one_day_sales,
+      sevenDayVolume: item.stats.seven_day_volume,
     }));
   } catch (error) {
     alert("Wallet Unavailable");
@@ -136,26 +141,38 @@ class App extends React.Component {
     console.log(dataCollections);
     const collectionsFull = await Promise.all(
       dataCollections.map(async (item) => {
-        const json = await fetch(
-          `https://api.opensea.io/api/v1/collection/${item.name}/stats`,
-          options
-        ).then((response) => {
-          return response.json();
-        });
-        let obj = {
-          name: item.name,
-          assets: item.assets,
-          floor:
-            json.stats.seven_day_volume > 0.01 ? json.stats.floor_price : 0,
-          oneDaySales: json.stats.one_day_sales,
-          oneDayAv: json.stats.one_day_average_price,
-          oneDayVolume: json.stats.one_day_volume,
-          collectionValue:
-            json.stats.seven_day_volume > 0.015
-              ? json.stats.floor_price * item.assets
-              : 0,
-        };
-        return obj;
+        if (item.sevenDayVolume > 0.15) {
+          const json1 = await fetch(
+            `https://api.opensea.io/api/v1/collection/${item.name}/stats`,
+            options
+          ).then((response) => {
+            return response.json();
+          });
+
+          const json2 = await fetch(`https://api.opensea.io/api/v1/assets?owner=${wallet}&asset_contract_address=${item.contractAddress}&include_orders=false`,
+          options,).then ((response) => {
+            return response.json();
+          });
+
+          const collectionNFTs = json2.map((item) => ({
+            nftName: item.name,
+          nftImage: item.image_url
+          }));
+
+          return {
+            ...item,
+            floor: json1.stats.floor_price,
+            collectionValue: json1.stats.floor_price * item.assets,
+            owned : collectionNFTs
+          };
+        } else {
+          return {
+            ...item,
+            floor: 0,
+            collectionValue: 0,
+            owned: []
+          };
+        }
       })
     );
     console.log(collectionsFull);
@@ -183,7 +200,7 @@ class App extends React.Component {
     });
   }
 
-  componentDidMount() {
+  /* componentDidMount() {
     fetch(
       "https://rest.coinapi.io/v1/exchangerate/ETH/USD?apikey=DA612043-61BE-4442-B1AF-85F00E6BCFE7"
     )
@@ -205,7 +222,7 @@ class App extends React.Component {
           ethPrice: "Price Unavailable",
         });
       });
-  }
+  }*/
 
   handleClick() {
     console.log(this.state);
