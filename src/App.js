@@ -78,7 +78,7 @@ function WalletSummary(props) {
       </div>
       <div id="dollar-value" className="sum-div">
         <p id="dollar-label">NFT Dollar Value</p>
-        <p id="dollar-total">{props.dollarValue}</p>
+        <p id="dollar-total">{props.dollarValue.toFixed(2)}</p>
       </div>
     </div>
   );
@@ -121,7 +121,7 @@ class WalletNFTs extends React.Component {
           </div>
         </div>
       ));
-    return <div id="nfts-whole">{nfts}</div>;
+    return this.props.completed.length > 1 ? <div id="nfts-whole">{nfts}</div> : <h5>Loading....</h5>
   }
 }
 
@@ -143,7 +143,6 @@ class App extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.processWallet = this.processWallet.bind(this);
-    this.handleClick = this.handleClick.bind(this);
   }
 
   async processWallet(wallet) {
@@ -151,7 +150,6 @@ class App extends React.Component {
     let totalNFTs = dataCollections
       .map((item) => item.assets)
       .reduce((a, b) => a + b);
-    console.log(dataCollections);
     const collectionsFull = await Promise.all(
       dataCollections.map(async (item) => {
         if (item.sevenDayVolume > 0.15) {
@@ -177,9 +175,6 @@ class App extends React.Component {
               }))
             );
 
-          //const collectionNFTs = json2
-          console.log(json1);
-          console.log(json2);
           return {
             ...item,
             floor: json1.stats.floor_price,
@@ -196,7 +191,6 @@ class App extends React.Component {
         }
       })
     );
-    console.log(collectionsFull);
 
     let ethTotal = collectionsFull
       .map((item) => item.collectionValue)
@@ -245,10 +239,6 @@ class App extends React.Component {
       });
   }
 
-  handleClick() {
-    console.log(this.state);
-  }
-
   handleChange(event) {
     this.setState({ typed: event.target.value });
   }
@@ -273,7 +263,6 @@ class App extends React.Component {
         <header>
           <h2>NFT Wallet Checker</h2>
           <h4>Eth price:${this.state.ethPrice}</h4>
-          <button onClick={this.handleClick}>Press</button>
         </header>
         <div id="content">
           <WalletEnter
