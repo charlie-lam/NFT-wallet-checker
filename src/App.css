@@ -73,29 +73,69 @@ header h4 {
 #nfts-whole {
   width: 90%;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
   gap: 10px;
 }
 
 .nft-div {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  /*min-height: 70vh;*/
+}
+
+.nft-div h2,
+.nft-div p {
+  margin: 5px;
+}
+
+.nft-div hr {
+  border-top: 3px solid rgb(10, 113, 10);
+  width: 80%;
+}
+
+.nft-summ {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
+  grid-template-rows: 1fr;
   justify-content: space-evenly;
   align-items: center;
   background: white;
   border-radius: 10px;
   padding: 5px 5px 5px 15px;
   box-shadow: 3px 3px rgba(244, 247, 245, 1);
+  margin: 10px;
 }
 
-.name-div {
-  grid-column: 1 / 5;
+.images-div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 20px;
 }
 
-.name-div p {
-  color: rgb(33, 172, 93);
-  font-size: 1.2rem;
-  margin-left: 10px;
-  font-weight: 500;
+.grouped-div {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  justify-content: space-evenly;
+  align-items: center;
+  gap: 10px;
+  margin: 10px;
+}
+
+.individual-div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 40vw;
+}
+
+.individual-div img {
+  max-width: 90%;
+  max-height: 90%;
+}
+
+.individual-div h5 {
+  margin: 5px;
 }

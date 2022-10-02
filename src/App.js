@@ -86,29 +86,41 @@ function WalletSummary(props) {
 
 class WalletNFTs extends React.Component {
   render() {
-    const nfts = this.props.completed.map((item) => (
-      <div className="nft-div" key={item.name}>
-        <div className="name-div">
-          <p>{item.name}</p>
+    const nfts = this.props.completed
+      .filter((item) => item.floor > 0)
+      .map((item) => (
+        <div className="nft-div" key={item.name}>
+          <hr />
+          <h2>{item.ident}</h2>
+          <p>{item.details}</p>
+          <div className="nft-summ">
+            <div className="floor-div">
+              <p>Floor price</p>
+              <p>{item.floor}</p>
+            </div>
+            <div className="asset-div">
+              <p>Count</p>
+              <p>{item.assets}</p>
+            </div>
+            <div className="volume-div">
+              <p>One day sales</p>
+              <p>{item.oneDaySales}</p>
+            </div>
+            <div className="value-div">
+              <p>Collection value</p>
+              <p>{item.collectionValue}</p>
+            </div>
+          </div>
+          <div className="grouped-div">
+            {item.owned.map((nft) => (
+              <div className="individual-div" key={nft.nftName}>
+                <img src={nft.nftImage} alt="Corresponding NFT"></img>
+                <h5>{nft.nftName}</h5>
+              </div>
+            ))}
+          </div>
         </div>
-        <div className="floor-div">
-          <p>Floor price</p>
-          <p>{item.floor}</p>
-        </div>
-        <div className="asset-div">
-          <p>Count</p>
-          <p>{item.assets}</p>
-        </div>
-        <div className="volume-div">
-          <p>One day sales</p>
-          <p>{item.oneDaySales}</p>
-        </div>
-        <div className="value-div">
-          <p>Collection value</p>
-          <p>{item.collectionValue}</p>
-        </div>
-      </div>
-    ));
+      ));
     return <div id="nfts-whole">{nfts}</div>;
   }
 }
@@ -127,6 +139,7 @@ class App extends React.Component {
       ethValue: 0,
       nftsLiquid: 0,
     };
+
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.processWallet = this.processWallet.bind(this);
@@ -149,28 +162,36 @@ class App extends React.Component {
             return response.json();
           });
 
-          const json2 = await fetch(`https://api.opensea.io/api/v1/assets?owner=${wallet}&asset_contract_address=${item.contractAddress}&include_orders=false`,
-          options,).then ((response) => {
-            return response.json();
-          });
+          const json2 = await fetch(
+            `https://api.opensea.io/api/v1/assets?owner=${wallet}&asset_contract_address=${item.contractAddress}&include_orders=false`,
+            options
+          )
+            .then((response) => {
+              let res = response.json();
+              return res;
+            })
+            .then((result) =>
+              result.assets.map((item) => ({
+                nftName: item.name,
+                nftImage: item.image_url,
+              }))
+            );
 
-          const collectionNFTs = json2.map((item) => ({
-            nftName: item.name,
-          nftImage: item.image_url
-          }));
-
+          //const collectionNFTs = json2
+          console.log(json1);
+          console.log(json2);
           return {
             ...item,
             floor: json1.stats.floor_price,
             collectionValue: json1.stats.floor_price * item.assets,
-            owned : collectionNFTs
+            owned: json2,
           };
         } else {
           return {
             ...item,
             floor: 0,
             collectionValue: 0,
-            owned: []
+            owned: [],
           };
         }
       })
@@ -200,7 +221,7 @@ class App extends React.Component {
     });
   }
 
-  /* componentDidMount() {
+  componentDidMount() {
     fetch(
       "https://rest.coinapi.io/v1/exchangerate/ETH/USD?apikey=DA612043-61BE-4442-B1AF-85F00E6BCFE7"
     )
@@ -222,7 +243,7 @@ class App extends React.Component {
           ethPrice: "Price Unavailable",
         });
       });
-  }*/
+  }
 
   handleClick() {
     console.log(this.state);
@@ -252,6 +273,7 @@ class App extends React.Component {
         <header>
           <h2>NFT Wallet Checker</h2>
           <h4>Eth price:${this.state.ethPrice}</h4>
+          <button onClick={this.handleClick}>Press</button>
         </header>
         <div id="content">
           <WalletEnter
