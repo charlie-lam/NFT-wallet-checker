@@ -54,7 +54,7 @@ const App = () => {
           </header>
           <div id="content">
             <WalletForm
-              submit={() => handleWalletSubmit(address)}
+              submit={handleWalletSubmit}
               walletAddress={walletAddress}
             />
             {this.state.wallet !== "" && (

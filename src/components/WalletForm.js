@@ -29,7 +29,7 @@ export const WalletForm = ({walletAddress, submit}) => {
             value={typed}
             onChange={onChange}
           ></input>
-          <button id="wallet-submit" onClick={submit}>
+          <button id="wallet-submit" onClick={submit(typed)}>
             Submit
           </button>
         </form>
