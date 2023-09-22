@@ -14,9 +14,20 @@ const App = () => {
 
     const [walletAddress, setWalletAddress] = useState("");
 
+    const [collections, setCollections] = useState([]);
+
+    const ReturnCollections = async (address) => {
+        return await FetchCollections(address);
+    };
+
+
     const handleWalletSubmit = (address) => {
         setWalletAddress(address);
-    } ;
+        const collections = ReturnCollections(address);
+        setCollections(collections);
+    };
+
+    
     
     return (
         <div id="whole">
@@ -31,12 +42,9 @@ const App = () => {
             />
             {this.state.wallet !== "" && (
               <WalletSummary
-                wallet={this.state.wallet}
-                collections={this.state.collections}
-                total={this.state.totalnfts}
-                liquid={this.state.nftsLiquid}
-                ethValue={this.state.ethValue}
-                dollarValue={this.state.ethValue * Number(this.state.ethPrice)}
+                wallet={walletAddress}
+                collections={collections}
+                ethPrice={ethPrice}
               />
             )}
             {this.state.wallet !== "" && (
