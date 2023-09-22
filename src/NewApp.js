@@ -1,23 +1,37 @@
-import FetchEthPrice from "./ApiCalls/FetchEthPrice";
+import {FetchEthPrice, FetchCollections} from "./ApiCalls/FetchEthPrice";
 
 const App = () => {
 
     const [ethPrice, setEthPrice] = useState("");
+    const [priceError, setPriceError] = useState(false);
 
     const ReturnEthPrice = async () => {
-        return await FetchEthPrice();
-    }
+        try{
+            return await FetchEthPrice();
+        }
+        catch (error){
+            console.log(error);
+            setPriceError(true);
+        };
+    };
 
     useEffect(() => {
-        SetEthPrice(ReturnEthPrice());
+        setEthPrice(ReturnEthPrice());
     }, []);
 
     const [walletAddress, setWalletAddress] = useState("");
-
     const [collections, setCollections] = useState([]);
+    const [collectionsError, setCollectionsError] = useState(false);
 
     const ReturnCollections = async (address) => {
-        return await FetchCollections(address);
+        try{
+            return await FetchCollections(address);
+        }
+        catch (error){
+            console.log(error)
+            setCollectionsError(true);
+        }
+        
     };
 
 
@@ -34,6 +48,7 @@ const App = () => {
           <header>
             <h2>NFT Wallet Checker</h2>
             <h4>Eth price:${ethPrice}</h4>
+            {priceError && <h4>Eth price unavailable</h4>}
           </header>
           <div id="content">
             <WalletForm
