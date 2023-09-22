@@ -1,4 +1,5 @@
-import {FetchEthPrice, FetchCollections} from "./ApiCalls/FetchEthPrice";
+import FetchEthPrice from "./ApiCalls/FetchEthPrice";
+import FetchCollections from "./ApiCalls/FetchCollections";
 
 const App = () => {
 

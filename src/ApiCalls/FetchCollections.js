@@ -1,4 +1,4 @@
-const FetchCollections = async (address) => {
+export const FetchCollections = async (address) => {
     let url = `https://api.opensea.io/api/v1/collections?asset_owner=${address}&offset=0&limit=300`;
     const response = await fetch(url);
     const collections = await response.json();
