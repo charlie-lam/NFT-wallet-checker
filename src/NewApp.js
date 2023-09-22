@@ -1,5 +1,7 @@
 import FetchEthPrice from "./ApiCalls/FetchEthPrice";
 import FetchCollections from "./ApiCalls/FetchCollections";
+import WalletForm from "./components/WalletForm";
+import { useState, useEffect } from "react";
 
 const App = () => {
 
@@ -42,7 +44,6 @@ const App = () => {
         setCollections(collections);
     };
 
-    
     
     return (
         <div id="whole">
