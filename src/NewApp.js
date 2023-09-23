@@ -1,5 +1,5 @@
 import FetchEthPrice from "./ApiCalls/FetchEthPrice";
-import FetchCollections from "./ApiCalls/FetchCollections";
+import FetchNfts from "./ApiCalls/FetchNfts";
 import WalletForm from "./components/WalletForm";
 import { useState, useEffect } from "react";
 
@@ -23,28 +23,26 @@ const App = () => {
     }, []);
 
     const [walletAddress, setWalletAddress] = useState("");
-    const [collections, setCollections] = useState([]);
-    const [collectionsError, setCollectionsError] = useState(false);
+    const [nfts, setNfts] = useState([]);
+    const [nftCallError, setNftCallError] = useState(false);
 
-    const ReturnCollections = async (address) => {
+    const ReturnNfts = async (address) => {
         try{
-            return await FetchCollections(address);
+            return await FetchNfts(address);
         }
         catch (error){
             console.log(error)
-            setCollectionsError(true);
+            setNftCallError(true);
         }
         
     };
 
-
     const handleWalletSubmit = (address) => {
         setWalletAddress(address);
-        const collections = ReturnCollections(address);
-        setCollections(collections);
+        const returnedNfts = ReturnNfts(address);
+        setNfts(returnedNfts);
     };
 
-    
     return (
         <div id="whole">
           <header>
@@ -57,10 +55,10 @@ const App = () => {
               submit={handleWalletSubmit}
               walletAddress={walletAddress}
             />
-            {this.state.wallet !== "" && (
+            {walletAddress !== "" && (
               <WalletSummary
-                wallet={walletAddress}
-                collections={collections}
+                walletAddress={walletAddress}
+                nfts={nfts}
                 ethPrice={ethPrice}
               />
             )}
