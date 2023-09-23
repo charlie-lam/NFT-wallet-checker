@@ -1,5 +1,6 @@
-import { FetchEthPrice } from "./ApiCalls/FetchEthPrice";
-import {FetchNfts} from "./ApiCalls/FetchNfts";
+import { fetchEthPrice } from "./ApiCalls/FetchEthPrice";
+import {fetchNfts} from "./ApiCalls/FetchNfts";
+import { fetchCollectionStats } from "./ApiCalls/FetchCollectionStats";
 import {WalletForm} from "./components/WalletForm";
 import {WalletSummary} from "./components/WalletSummary";
 import { useState, useEffect } from "react";
@@ -12,7 +13,7 @@ const App = () => {
 
     const ReturnEthPrice = async () => {
         try{
-            const price = await FetchEthPrice();
+            const price = await fetchEthPrice();
             setEthPrice(price);
         }
         catch (error){
@@ -31,7 +32,7 @@ const App = () => {
 
     const ReturnNfts = async (address) => {
         try{
-            return await FetchNfts(address);
+            return await fetchNfts(address);
         }
         catch (error){
             console.log(error)
@@ -50,6 +51,17 @@ const App = () => {
       }, {});
     }
 
+    const ReturnCollectionsStats = async (partialCollections) => {
+      const statCompleteCollections = await Promise.all(
+        partialCollections.map( async (collection) => {
+          const collectionStats = await fetchCollectionStats(collection.name)
+          setTimeout(() => {}, 1000);
+          return {...collection, collectionStats}
+        })
+      )
+      return statCompleteCollections;
+    };
+
     const handleWalletSubmit = async (address) => {
         setWalletAddress(address);
         const returnedNfts = await ReturnNfts(address);
@@ -60,7 +72,8 @@ const App = () => {
           name,
           nfts,
         }))
-        setCollections(partialCollectionsArray);
+        const statFilledCollections = await ReturnCollectionsStats(partialCollectionsArray);
+        setCollections(statFilledCollections);
     };
 
     return (
