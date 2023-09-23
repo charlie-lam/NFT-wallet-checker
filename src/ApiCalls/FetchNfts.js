@@ -6,5 +6,5 @@ export const FetchNfts = async (address) => {
       
       const response = await fetch(`https://api.opensea.io/v2/chain/ethereum/account/${address}/nfts`, options)
       const nfts = await response.json();
-      return nfts;
+      return nfts.nfts;
 }
