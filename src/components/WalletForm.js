@@ -1,12 +1,17 @@
 import { useState } from "react";
 
-export const WalletForm = ({walletAddress, submit}) => {
+export const WalletForm = ({walletAddress, handleWalletSubmit}) => {
     
     const [typed, setTyped] = useState("")
 
     const onChange = (event) => {
-      setTyped(event.value)
+      setTyped(event.target.value)
     }
+
+    const onSubmit = (event) => {
+      event.preventDefault();
+      handleWalletSubmit(typed);
+    };
     
     let styleFull = {
       width: "20%",
@@ -18,7 +23,7 @@ export const WalletForm = ({walletAddress, submit}) => {
     let defaultStyle;
     return (
       <div id="form-div" style={walletAddress !== "" ? styleFull : defaultStyle}>
-        <form id="wallet-ask">
+        <form id="wallet-ask" onSubmit={onSubmit}>
           <label htmlFor="wallet-input">Eth wallet:</label>
           <br />
           <input
@@ -29,9 +34,7 @@ export const WalletForm = ({walletAddress, submit}) => {
             value={typed}
             onChange={onChange}
           ></input>
-          <button id="wallet-submit" onClick={submit(typed)}>
-            Submit
-          </button>
+          <input id="wallet-submit" type="submit" value="Submit" />
         </form>
       </div>
     );
