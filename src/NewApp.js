@@ -1,6 +1,7 @@
 import FetchEthPrice from "./ApiCalls/FetchEthPrice";
 import FetchNfts from "./ApiCalls/FetchNfts";
 import WalletForm from "./components/WalletForm";
+import WalletSummary from "./components/WalletSummary";
 import { useState, useEffect } from "react";
 
 const App = () => {
@@ -62,6 +63,7 @@ const App = () => {
                 ethPrice={ethPrice}
               />
             )}
+            {nftCallError && <h4>Wallet unavailable</h4>}
             {this.state.wallet !== "" && (
               <WalletNFTs completed={this.state.collections} />
             )}
