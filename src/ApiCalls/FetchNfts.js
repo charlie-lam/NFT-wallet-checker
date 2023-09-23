@@ -1,4 +1,4 @@
-export const FetchNfts = async (address) => {
+export const fetchNfts = async (address) => {
     const options = {
         method: 'GET',
         headers: {accept: 'application/json', 'X-API-KEY': `${process.env.REACT_APP_OPENSEA_API_KEY}`}
