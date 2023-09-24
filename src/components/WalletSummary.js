@@ -10,9 +10,9 @@ export const WalletSummary = ({walletAddress, collections, ethPrice}) => {
 
     useEffect(() => {
         setTotalNfts(collections.map(collection => collection.nfts).reduce((acc, collectionNfts) => acc + collectionNfts.length, 0));
-        const filteredCollections = collections.filter(collection => collection.collectionStats["seven_day_volume"] > 0.01);
+        const filteredCollections = collections.filter(collection => collection.sevenDayVolume > 0.01);
         setLiquidNfts(filteredCollections.map(collection => collection.nfts).reduce((acc, collectionNfts) => acc + collectionNfts.length, 0));
-        setEthValue(filteredCollections.map(collection => collection.collectionStats["floor_price"]).reduce((acc, floor) => acc + floor));
+        setEthValue(filteredCollections.map(collection => collection.floorPrice).reduce((acc, floor) => acc + floor));
         setDollarValue(ethValue*ethPrice);
     })
 

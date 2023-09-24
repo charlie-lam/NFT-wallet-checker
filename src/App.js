@@ -35,7 +35,6 @@ const App = () => {
             return await fetchNfts(address);
         }
         catch (error){
-            console.log(error)
             setNftCallError(true);
         }
     };
@@ -51,12 +50,23 @@ const App = () => {
       }, {});
     }
 
-    const ReturnCollectionsStats = async (partialCollections) => {
+    const ReturnCollectionStats = async (collectionName) => {
+      try{
+        const stats = await fetchCollectionStats(collectionName);
+        const sevenDayVolume = stats["seven_day_volume"] ? stats["seven_day_volume"] : 0;
+        const floorPrice = stats["floor_price"] ? stats["floor_price"] : 0;
+        return {sevenDayVolume: sevenDayVolume, floorPrice: floorPrice};
+    }
+    catch (error){
+        return {sevenDayVolume : 0, floorPrice : 0};
+    };
+    };
+
+    const fillCollectionsStats = async (partialCollections) => {
       const statCompleteCollections = await Promise.all(
         partialCollections.map( async (collection) => {
-          const collectionStats = await fetchCollectionStats(collection.name)
-          setTimeout(() => {}, 1000);
-          return {...collection, collectionStats}
+          const collectionStats = await ReturnCollectionStats(collection.name)
+          return {...collection, sevenDayVolume : collectionStats.sevenDayVolume, floorPrice : collectionStats.floorPrice}
         })
       )
       return statCompleteCollections;
@@ -65,14 +75,12 @@ const App = () => {
     const handleWalletSubmit = async (address) => {
         setWalletAddress(address);
         const returnedNfts = await ReturnNfts(address);
-        console.log(returnedNfts);
         const groupedNftObject = groupNfts(returnedNfts);
-        console.log(groupedNftObject);
         const partialCollectionsArray = Object.entries(groupedNftObject).map(([name, nfts]) => ({
           name,
           nfts,
         }))
-        const statFilledCollections = await ReturnCollectionsStats(partialCollectionsArray);
+        const statFilledCollections = await fillCollectionsStats(partialCollectionsArray);
         setCollections(statFilledCollections);
     };
 
